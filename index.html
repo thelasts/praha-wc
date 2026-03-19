@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <title>Moje mapa Prahy</title>
+  <meta charset="utf-8" />
+<!--  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />-->
+<!--  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>-->
+    <link rel="stylesheet" href="./lib/leaflet.css" />
+    <script src="./lib/leaflet.js"></script>
+    <style>
+    #map { height: 100vh; width: 100%; }
+    .leaflet-control-attribution { background: rgba(255,255,255,0.8); }
+  </style>
+</head>
+<body>
+  <div id="map"></div>
+
+  <script>
+    const map = L.map('map').setView([50.075, 14.4378], 13);
+
+    // const stinovani = L.tileLayer.wms()
+    
+    const ortofoto = L.tileLayer.wms(
+      'https://gs-pub.praha.eu/imgs/rest/services/ort/letecke_snimkovani/ImageServer/WMTS?',
+      {
+        layers: 'ort_letecke_snimkovani',
+        format: 'image/jpgpng',
+        transparent: false,
+        version: '1.0.0',
+        attribution: 'IPR Praha - Ortofoto'
+      }
+    );
+    ortofoto.addTo(map);
+
+    map.setMaxBounds([
+      [49.90, 14.15],  // jihozápad
+      [50.25, 14.75]   // severovýchod
+    ]);
+  </script>
+</body>
+</html>
