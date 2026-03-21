@@ -1,41 +1,75 @@
 <!DOCTYPE html>
-<html lang="cs">
+<html lang="en">
 <head>
-  <title>Moje mapa Prahy</title>
-  <meta charset="utf-8" />
-<!--  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />-->
-<!--  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>-->
-    <link rel="stylesheet" href="./lib/leaflet.css" />
-    <script src="./lib/leaflet.js"></script>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Zakladni Mapa App</title>
     <style>
-    #map { height: 100vh; width: 100%; }
-    .leaflet-control-attribution { background: rgba(255,255,255,0.8); }
-  </style>
+        html, body, #viewDiv { padding: 0; margin: 0; height: 100%; width: 100%; }
+    </style>
+    <link rel="stylesheet" href="https://js.arcgis.com/4.32/esri/themes/light/main.css">
+    <script src="https://js.arcgis.com/4.32/"></script>
 </head>
 <body>
-  <div id="map"></div>
+<div id="controls">
+    <label for="styleSelect">Style: </label>
+    <select id="styleSelect">
+        <option value="bw">BW (Default)</option>
+        <option value="color">Color</option>
+        <option value="dark">Dark</option>
+    </select>
+</div>
+<div id="viewDiv"></div>
+<script>
+    require([
+        "esri/Map",
+        "esri/views/MapView",
+        "esri/layers/VectorTileLayer",
+        "esri/geometry/Extent",
+        "dojo/dom",
+        "dojo/on",
+    ], function(Map, MapView, VectorTileLayer, Extent, dom, on) {
+        const serviceUrl = "https://tiles.arcgis.com/tiles/SBTXIEUGWbqzUecw/arcgis/rest/services/zakladni_mapa/VectorTileServer";
 
-  <script>
-    const map = L.map('map').setView([50.075, 14.4378], 13);
+        const styleUrls = {
+            bw: "https://iprpraha.maps.arcgis.com/sharing/rest/content/items/c06609b3412d45eb8bda2fd24d3371a8/resources/styles/root.json",
+            color: "https://iprpraha.maps.arcgis.com/sharing/rest/content/items/50f872ac3f85435baf86c2443b247af7/resources/styles/root.json",
+            dark: "https://iprpraha.maps.arcgis.com/sharing/rest/content/items/63edd325a9f94897bf10f8a23b7950d7/resources/styles/root.json"
+        };
 
-    // const stinovani = L.tileLayer.wms()
-    
-    const ortofoto = L.tileLayer.wms(
-      'https://gs-pub.praha.eu/imgs/rest/services/ort/letecke_snimkovani/ImageServer/WMTS?',
-      {
-        layers: 'ort_letecke_snimkovani',
-        format: 'image/jpgpng',
-        transparent: false,
-        version: '1.0.0',
-        attribution: 'IPR Praha - Ortofoto'
-      }
-    );
-    ortofoto.addTo(map);
+        const basemapLayer = new VectorTileLayer({
+            url: serviceUrl  // Auto-loads tiles/styles from service JSON
+        });
 
-    map.setMaxBounds([
-      [49.90, 14.15],  // jihozápad
-      [50.25, 14.75]   // severovýchod
-    ]);
-  </script>
+        const map = new Map({
+            layers: [basemapLayer],
+            spatialReference: {
+                wkid: 102067  // S-JTSK / Krovak (latestWkid: 5514)
+            }
+        });
+
+        const view = new MapView({
+            container: "viewDiv",
+            map: map,
+            extent: new Extent({  // initialExtent
+                xmin: -878528.7537314763,
+                ymin: -1154488.7545631744,
+                xmax: -569093.2698605085,
+                ymax: -956827.4642405937,
+                spatialReference: { wkid: 102067 }
+            }),
+            scale: 914400  // LOD 1
+        });
+        // Default style
+        basemapLayer.loadStyle(styleUrls.bw);
+        // Style switcher
+        on(dom.byId("styleSelect"), "change", function() {
+            const selectedStyle = styleUrls[this.value];
+            basemapLayer.loadStyle(selectedStyle);  // Reloads layer with new style
+        });
+
+    });
+
+</script>
 </body>
 </html>
