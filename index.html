@@ -16,16 +16,20 @@
     <script type="module" src="https://js.arcgis.com/5.0/"></script>
     <script type="module">
         const [Map, MapView, VectorTileLayer, WMTSLayer, Extent,
-            Legend, Expand, LayerList, OpacitySlider] = await $arcgis.import([
+            Slider, Legend, Expand, LayerList, Home, Print, Search] = await $arcgis.import([
             "@arcgis/core/Map.js",
             "@arcgis/core/views/MapView.js",
             "@arcgis/core/layers/VectorTileLayer.js",
             "@arcgis/core/layers/WMTSLayer.js",
             "@arcgis/core/geometry/Extent.js",
+            "@arcgis/core/widgets/Slider.js",
             "@arcgis/core/widgets/Legend.js",
             "@arcgis/core/widgets/Expand.js",
             "@arcgis/core/widgets/LayerList.js",
-            "@arcgis/core/widgets/smartMapping/OpacitySlider.js"
+            "@arcgis/core/widgets/smartMapping/OpacitySlider.js",
+            "@arcgis/core/widgets/Home.js",
+            "@arcgis/core/widgets/Print.js",
+            "@arcgis/core/widgets/Search.js"
         ]);
         const serviceUrl = "https://tiles.arcgis.com/tiles/SBTXIEUGWbqzUecw/arcgis/rest/services/zakladni_mapa/VectorTileServer";
         const styleUrls = {
@@ -36,67 +40,85 @@
         const basemapLayer = new VectorTileLayer({
             url: serviceUrl
         });
-        const stinLayer = new WMTSLayer({
+
+        const hillshadeLayer = new WMTSLayer({
             url: "https://gs-pub.praha.eu/imgs/rest/services/map/dsm_hls/ImageServer/WMTS?",
-            visible: false
-        })
+            activeLayer: {
+                id: "dsm_hls"
+            },
+            blendMode: "multiply",
+            opacity: 0.6
+        });
+
+        hillshadeLayer.title = "Digitální stínovaný model (DSM)";
+
         const ortoLayer = new WMTSLayer({
             url: "https://gs-pub.praha.eu/imgs/rest/services/ort/letecke_snimkovani/ImageServer/WMTS?",
             visible: false
         })
 
         const map = new Map({
-            layers: [basemapLayer, ortoLayer, stinLayer],
+            layers: [basemapLayer, ortoLayer, hillshadeLayer],
             spatialReference: { wkid: 102067 }
         });
 
         const view = new MapView({
             container: `viewDiv`,
             map: map,
-            center: [14.421, 50.088],
+            center: [-723810, -1055158],
             extent: new Extent({
                 xmin: -878528.7537314763, ymin: -1154488.7545631744,
                 xmax: -569093.2698605085, ymax: -956827.4642405937,
                 spatialReference: { wkid: 102067 }
             }),
-            zoom: 3,
-            constraints: {
-                minScale: 1828800,
-                maxScale: 111.6210938
-            }
+            zoom: 9,
         });
-
-        // LayerList (handles toggle/opacity)
         const layerList = new LayerList({
             view: view,
             listItemCreatedFunction: (event) => {
-                const { layer, item } = event;
+                const {layer, item} = event;
 
-                // Skip base layer styling
+                // Disable default visibility toggle for base layer
                 if (layer === basemapLayer) {
-                    item.interactive = false;
-                    item.open = false;
+                    item.actionsSections = [];
                 }
+                // Add a calcite slider for updating opacity on group layers.
+                if (item.layer !== basemapLayer) {
+                    const label = document.createElement("calcite-label");
+                    label.title = "Layer Opacity";
+                    label.scale = "s";
 
-                // Add opacity slider for overlays
-                const opacitySlider = new OpacitySlider({
-                    viewModel: {
-                        layer: layer,
-                        view: view
-                    }
-                });
+                    const slider = document.createElement("calcite-slider");
+                    slider.labelHandles = true;
+                    slider.labelTicks = true;
+                    slider.min = 0;
+                    slider.minLabel = "0";
+                    slider.max = 1;
+                    slider.maxLabel = "1";
+                    slider.scale = "s";
+                    slider.step = 0.01;
+                    slider.value = item.layer.opacity ? item.layer.opacity : 1;
+                    slider.ticks = 0.5;
 
-                item.panel = {
-                    content: opacitySlider.domNode,
-                    open: false
-                };
+                    slider.addEventListener("calciteSliderChange", () => {
+                        item.layer.opacity = slider.value;
+                    });
+
+                    label.appendChild(slider);
+
+                    item.panel = {
+                        content: label,
+                        icon: "sliders-horizontal",
+                        title: "Change layer opacity"
+                    };
+                }
             }
         });
 
-        // Layer list
+        // UI widgets
         const layerListExpand = new Expand({
-            view: view,
             content: layerList,
+            view: view,
             expanded: false
         });
 
@@ -105,38 +127,60 @@
             view: view
         });
 
-        // Layout
-        view.ui.add(layerListExpand, "top-right");
-        view.ui.add(
-            new Expand({
-                content: legend,
-                view,
-                expanded: false,
-            }),
-            "top-right",
-        );
+        let legendExpand = new Expand({
+            content: legend,
+            view,
+            expanded: false,
+        });
 
-        basemapLayer.loadStyle(styleUrls.bw);
+        let homeWidget = new Home({
+            view: view,
+            viewpoint: view.center
+        });
+
+        let printWidget = new Print({
+            expanded: false
+        });
+
+        let searchWidget = new Search({
+            view: view,
+            className: "esri-search"
+        });
+
+        // UI Layout
+        view.ui.add(layerListExpand, "bottom-left");
+        view.ui.add(legendExpand, "top-right");
+
+        // view.ui.add(searchWidget, "top-trailing");
+        view.ui.add(homeWidget, "top-left");
+        view.ui.add(printWidget, "top-left");
 
         // Style selector
+        basemapLayer.loadStyle(styleUrls.bw);
         document.getElementById("styleSelect").addEventListener("change", (e) => {
-            basemapLayer.loadStyle(styleUrls[e.target.value]);});
+            basemapLayer.loadStyle(styleUrls[e.target.value]);
+        });
+    //     Search listener
+    //     document.getElementsByClassName("esri-search")[0].addEventListener("search-complete", (e) => {
+    //         view.goTo(e.results[0].feature.geometry);
+    //     });
+
     </script>
 
 
 </head>
 <body>
 <div id="viewDiv"></div>
+
 <div id="controls">
-    <!-- Base style selector -->
-    <esri-widget id="style-widget">
+    <div id="style-widget">
         <div class="esri-widget__heading">Base Style</div>
         <select class="esri-select" id="styleSelect">
-            <option value="bw">BW</option>
+            <option value="bw" selected>BW</option>
             <option value="color">Color</option>
             <option value="dark">Dark</option>
         </select>
-    </esri-widget>
+    </div>
 </div>
 </body>
 </html>
