@@ -17,8 +17,9 @@ export function createHillshadeLayer() {
         activeLayer: { id: "dsm_hls" },
         blendMode: "multiply",
         opacity: 0.6,
-        visible: true,
-        title: "Vrstva DSM"
+        visible: false,
+        title: "Vrstva DSM",
+        icon: "hillshade"
     });
 }
 
@@ -26,7 +27,8 @@ export function createOrtoLayer() {
     return new WMTSLayer({
         url: "https://gs-pub.praha.eu/imgs/rest/services/ort/letecke_snimkovani/ImageServer/WMTS?",
         visible: false,
-        title: "Vrstva Ortofoto"
+        title: "Vrstva Ortofoto",
+        icon: "drone-fixed-wing"
     });
 }
 
@@ -38,5 +40,5 @@ export function createFeatureLayer(features) {
 }
 
 export function loadBasemapStyle(basemapLayer, styleName) {
-    basemapLayer.loadStyle(BASEMAP_STYLES[styleName]);
+    basemapLayer.loadStyle(BASEMAP_STYLES[styleName]).catch(console.error);
 }

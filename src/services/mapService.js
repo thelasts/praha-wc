@@ -14,7 +14,6 @@ export function createMapView(map, containerId) {
     return new MapView({
         container: containerId,
         map: map,
-        center: MAP_CONFIG.center,
         extent: new Extent(MAP_CONFIG.extent),
         zoom: MAP_CONFIG.zoom
     });

@@ -8,79 +8,88 @@ export function createLayerList(view, basemapLayer, loadBasemapStyle) {
     const layerList = new LayerList({
         view: view,
         listItemCreatedFunction: (event) => {
-            const { layer, item } = event;
+            const {item} = event;
+            item.icon = item.layer.icon
 
             if (item.layer === basemapLayer) {
-                const label = document.createElement("calcite-label");
-                label.title = "Basemap style";
-                label.scale = "s";
-                label.innerText = "Basemap style";
-
-                const select = document.createElement("calcite-select");
-                select.scale = "s";
-
-                const options = [
-                    { value: "bw", label: "BW" },
-                    { value: "color", label: "Color" },
-                    { value: "dark", label: "Dark" }
-                ];
-
-                options.forEach((opt) => {
-                    const option = document.createElement("calcite-option");
-                    option.value = opt.value;
-                    option.label = opt.label;
-                    option.textContent = opt.label;
-
-                    if (opt.value === "bw") {
-                        option.selected = true;
-                    }
-
-                    select.appendChild(option);
-                });
-
-                select.addEventListener("calciteSelectChange", (event) => {
-                    loadBasemapStyle(basemapLayer, event.target.value);
-                });
-
-                label.appendChild(select);
-
                 item.panel = {
-                    content: label,
                     icon: "basemap",
-                    title: "Change basemap style"
+                    title: "Change basemap style",
+                    content: () => {
+                        const container = document.createElement("div");
+                        container.style.padding = "10px";
+
+                        const label = document.createElement("calcite-label");
+                        label.setAttribute("scale", "s");
+                        label.textContent = "Basemap style ";
+
+                        const select = document.createElement("calcite-select");
+                        select.setAttribute("scale", "s");
+
+                        const options = [
+                            {value: "bw", label: "BW"},
+                            {value: "color", label: "Color"},
+                            {value: "dark", label: "Dark"}
+                        ];
+
+                        options.forEach((opt) => {
+                            const option = document.createElement("calcite-option");
+                            option.setAttribute("value", opt.value);
+                            option.setAttribute("label", opt.label);
+                            option.textContent = opt.label;
+
+                            if (opt.value === "bw") {
+                                option.setAttribute("selected", "true");
+                            }
+
+                            select.appendChild(option);
+                        });
+
+                        select.addEventListener("calciteSelectChange", (e) => {
+                            loadBasemapStyle(item.layer, e.target.value);
+                        });
+
+                        label.appendChild(select);
+                        container.appendChild(label);
+                        return container;
+                    }
                 };
 
                 item.actionsSections = [];
                 return;
             }
 
-            const label = document.createElement("calcite-label");
-            label.title = "Layer Opacity";
-            label.scale = "s";
-            label.innerText = "Layer opacity";
-
-            const slider = document.createElement("calcite-slider");
-            slider.labelHandles = true;
-            slider.labelTicks = true;
-            slider.min = 0;
-            slider.minLabel = "0";
-            slider.max = 1;
-            slider.maxLabel = "1";
-            slider.scale = "s";
-            slider.step = 0.01;
-            slider.value = item.layer.opacity ?? 1;
-            slider.ticks = 0.5;
-
-            slider.addEventListener("calciteSliderChange", () => {
-                item.layer.opacity = slider.value;
-            });
-
-            label.appendChild(slider);
-
             item.panel = {
-                content: label,
                 icon: "sliders-horizontal",
-                title: "Change layer opacity"
+                title: "Change layer opacity",
+                content: () => {
+                    const container = document.createElement("div");
+                    container.style.padding = "10px";
+
+                    const label = document.createElement("calcite-label");
+                    label.setAttribute("scale", "s");
+                    label.textContent = "Layer opacity ";
+
+                    const slider = document.createElement("calcite-slider");
+                    slider.setAttribute("label-handles", "true");
+                    slider.setAttribute("label-ticks", "true");
+                    slider.setAttribute("min", "0");
+                    slider.setAttribute("max", "1");
+                    slider.setAttribute("scale", "s");
+                    slider.setAttribute("step", "0.01");
+                    slider.setAttribute("ticks", "0.5");
+
+                    const initialOpacity = item.layer.opacity !== undefined ? item.layer.opacity : 1;
+                    slider.setAttribute("value", initialOpacity.toString());
+
+                    slider.addEventListener("calciteSliderChange", (e) => {
+                        item.layer.opacity = Number(e.target.value);
+                    });
+
+                    label.appendChild(slider);
+                    container.appendChild(label);
+                    return container;
+                }
             };
         }
     });
@@ -91,7 +100,6 @@ export function createLayerList(view, basemapLayer, loadBasemapStyle) {
         expanded: false
     });
 }
-
 
 export function createLegend(view) {
     const legend = new Legend({ view });

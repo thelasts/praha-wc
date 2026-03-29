@@ -1,9 +1,57 @@
+const getFeatureRendererByIconType = () => {
+    return {
+        type: "unique-value",
+        field: "typIkony",
+
+        defaultSymbol: {
+            type: "simple-marker",
+            size: 8,
+            color: [56, 56, 56],
+            outline: {
+                color: [255, 255, 255],
+                width: 1
+            }
+        },
+
+        uniqueValueInfos: [
+            {
+                value: "0",
+                symbol: {
+                    type: "simple-marker",
+                    size: 8,
+                    color: [0, 122, 194],
+                    outline: { color: [255, 255, 255], width: 1 }
+                }
+            },
+            {
+                value: "1",
+                symbol: {
+                    type: "simple-marker",
+                    size: 8,
+                    color: [255, 0, 0],
+                    outline: { color: [255, 255, 255], width: 1 }
+                }
+            },
+            {
+                value: "2",
+                symbol: {
+                    type: "simple-marker",
+                    size: 8,
+                    color: [255, 165, 0],
+                    outline: { color: [255, 255, 255], width: 1 }
+                }
+            }
+        ]
+    };
+};
+
 export const FEATURE_LAYER_CONFIG = {
-    title: "Accessible WC Locations",
+    title: "Bezbariérové WC - Praha",
+    icon: "wheelchair",
     geometryType: "point",
     spatialReference: { wkid: 102067 },
     fields: [
-        { name: "ObjectID", alias: "Object ID", type: "oid" },
+        { name: "OBJECTID", alias: "Object ID", type: "oid" },
         { name: "kategorie", alias: "Category", type: "string" },
         { name: "typIkony", alias: "Icon Type", type: "string" },
         { name: "ulice", alias: "Street", type: "string" },
@@ -12,23 +60,9 @@ export const FEATURE_LAYER_CONFIG = {
         { name: "longitude", alias: "Longitude", type: "double" },
         { name: "latitude", alias: "Latitude", type: "double" }
     ],
-    objectIdField: "ObjectID",
-    renderer: {
-        type: "simple",
-        symbol: {
-            type: "simple-marker",
-            size: 8,
-            color: [0, 122, 194],
-            outline: {
-                color: [255, 255, 255],
-                width: 1
-            }
-        }
-    },
+    objectIdField: "OBJECTID",
+    renderer: getFeatureRendererByIconType(),
     labelingInfo: [{
-        labelExpressionInfo: {
-            expression: "$feature.mesto"
-        },
         symbol: {
             type: "text",
             color: [0, 0, 0],
@@ -39,7 +73,7 @@ export const FEATURE_LAYER_CONFIG = {
                 family: "Arial"
             }
         },
-        minScale: 50000  // Only show labels when zoomed in
+        minScale: 50000
     }],
     popupTemplate: {
         title: "WC - {mesto}",

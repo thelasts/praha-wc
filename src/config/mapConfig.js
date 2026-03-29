@@ -1,12 +1,11 @@
 export const MAP_CONFIG = {
-    center: [-723810, -1055158],
-    zoom: 9,
+    zoom: 7,
     spatialReference: { wkid: 102067 },
     extent: {
-        xmin: -878528.7537314763,
-        ymin: -1154488.7545631744,
-        xmax: -569093.2698605085,
-        ymax: -956827.4642405937,
+        xmin: -742527.35,
+        ymin: -1044099.31,
+        xmax: -741527.35,
+        ymax: -1043099.31,
         spatialReference: { wkid: 102067 }
     }
 };

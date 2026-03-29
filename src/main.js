@@ -21,12 +21,14 @@ import { createLayerList, createLegend, createHomeWidget } from "./components/wi
 import { loadGraphics } from "./services/dataService.js";
 import { WC_PATH, WC_PATH_IN } from "./config/dataPaths.js";
 
+
+
 async function initApp() {
     const basemapLayer = createBasemapLayer();
     const hillshadeLayer = createHillshadeLayer();
     const ortoLayer = createOrtoLayer();
 
-    const graphics = loadGraphics(WC_PATH);
+    const graphics = await loadGraphics(WC_PATH);
     const wcLayer = createFeatureLayer(graphics);
 
     const map = createMap([
