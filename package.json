@@ -1,7 +1,19 @@
 {
+  "name": "praha-wc",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "prebuild": "node src/utils/export-wc.js",
+    "dev": "npm run prebuild && vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
   "dependencies": {
-    "@arcgis/core": "^5.0.13",
-    "@arcgis/map-components": "^5.0.13",
-    "@esri/calcite-components": "^5.0.2"
+    "@arcgis/core": "^5.0",
+    "@esri/calcite-components": "^5.0"
+  },
+  "devDependencies": {
+    "vite": "^5.2.0",
+    "xlsx": "^0.18.5"
   }
 }

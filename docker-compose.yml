@@ -1,8 +1,11 @@
 version: '3.8'
+
 services:
   web:
-    build: .
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: praha-wc-app
     ports:
-      - "8080:80"
-    volumes:
-      - ./data:/usr/share/nginx/html/data:ro  # pro editaci GeoJSON
+      - "3000:80"
+    restart: unless-stopped

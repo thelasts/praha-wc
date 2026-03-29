@@ -1,0 +1,23 @@
+html, body {
+    padding: 0;
+    margin: 0;
+    height: 100%;
+    width: 100%;
+    font-family: sans-serif, Arial;
+}
+
+#viewDiv {
+    height: calc(100% - 50px);
+    width: 100%;
+}
+
+#controls {
+    padding: 10px;
+    background: white;
+    border-bottom: 1px solid #ddd;
+}
+
+select {
+    padding: 5px;
+    margin-right: 10px;
+}
