@@ -9,13 +9,13 @@ export function createLayerList(view, basemapLayer, loadBasemapStyle) {
         view: view,
         listItemCreatedFunction: (event) => {
             const {item} = event;
-            item.icon = item.layer.icon
+            item.icon = item.layer.icon;
 
             if (item.layer === basemapLayer) {
                 item.panel = {
                     icon: "basemap",
                     title: "Change basemap style",
-                    content: () => {
+                    content: (() => {
                         const container = document.createElement("div");
                         container.style.padding = "10px";
 
@@ -52,7 +52,7 @@ export function createLayerList(view, basemapLayer, loadBasemapStyle) {
                         label.appendChild(select);
                         container.appendChild(label);
                         return container;
-                    }
+                    })()
                 };
 
                 item.actionsSections = [];
@@ -62,7 +62,7 @@ export function createLayerList(view, basemapLayer, loadBasemapStyle) {
             item.panel = {
                 icon: "sliders-horizontal",
                 title: "Change layer opacity",
-                content: () => {
+                content: (() => {
                     const container = document.createElement("div");
                     container.style.padding = "10px";
 
@@ -89,7 +89,7 @@ export function createLayerList(view, basemapLayer, loadBasemapStyle) {
                     label.appendChild(slider);
                     container.appendChild(label);
                     return container;
-                }
+                })()
             };
         }
     });

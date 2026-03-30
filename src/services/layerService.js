@@ -7,7 +7,8 @@ import { FEATURE_LAYER_CONFIG } from "../config/featureLayer.js";
 export function createBasemapLayer() {
     return new VectorTileLayer({
         url: BASEMAP_SERVICE_URL,
-        title: "Základní mapa"
+        title: "Vrstva Základní mapa",
+        type: "basemap",
     });
 }
 

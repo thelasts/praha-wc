@@ -47,8 +47,8 @@ async function initApp() {
     const homeWidget = createHomeWidget(view);
 
     view.ui.add(layerListExpand, "bottom-left");
-    view.ui.add(legendExpand, "top-right");
     view.ui.add(homeWidget, "top-left");
+    view.ui.add(legendExpand, "top-left");
 }
 
 initApp().catch(console.error);

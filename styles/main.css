@@ -1,9 +1,16 @@
+.dm-sans-400 {
+              font-family: "DM Sans", sans-serif;
+              font-optical-sizing: auto;
+              font-weight: 400;
+              font-style: normal;
+          }
+
 html, body {
     padding: 0;
     margin: 0;
     height: 100%;
     width: 100%;
-    font-family: sans-serif, Arial;
+    font-family: "DM Sans", sans-serif;
 }
 
 #viewDiv {
