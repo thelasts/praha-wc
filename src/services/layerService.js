@@ -8,7 +8,6 @@ export function createBasemapLayer() {
     return new VectorTileLayer({
         url: BASEMAP_SERVICE_URL,
         title: "Vrstva Základní mapa",
-        type: "basemap",
     });
 }
 
@@ -20,7 +19,7 @@ export function createHillshadeLayer() {
         opacity: 0.6,
         visible: false,
         title: "Vrstva DSM",
-        icon: "hillshade"
+        icon: "hillshade",
     });
 }
 

@@ -17,13 +17,18 @@ import {
 } from "./services/layerService.js";
 
 import { createMap, createMapView } from "./services/mapService.js";
-import { createLayerList, createLegend, createHomeWidget } from "./components/widgets.js";
 import { loadGraphics } from "./services/dataService.js";
+
+import { createLayerList, createLegend, createHomeWidget, createFeatureTable } from "./components/widgets.js";
+import { initResizer } from "./components/resizer.js";
 import { WC_PATH, WC_PATH_IN } from "./config/dataPaths.js";
 
 
 
 async function initApp() {
+
+    initResizer().catch(console.error);
+
     const basemapLayer = createBasemapLayer();
     const hillshadeLayer = createHillshadeLayer();
     const ortoLayer = createOrtoLayer();
@@ -45,10 +50,13 @@ async function initApp() {
     const layerListExpand = createLayerList(view, basemapLayer, loadBasemapStyle);
     const legendExpand = createLegend(view);
     const homeWidget = createHomeWidget(view);
+    const tableList = createFeatureTable(view, wcLayer);
 
     view.ui.add(layerListExpand, "bottom-left");
     view.ui.add(homeWidget, "top-left");
     view.ui.add(legendExpand, "top-left");
+    // view.ui.add(tableList, "bottom-trailing");
+    view.ui.move("attribution", "bottom-right");
 }
 
 initApp().catch(console.error);

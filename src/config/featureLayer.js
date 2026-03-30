@@ -70,13 +70,13 @@ export const FEATURE_LAYER_CONFIG = {
             haloSize: 1,
             font: {
                 size: 9,
-                family: "Arial"
+                family: "Helvetica"
             }
         },
         minScale: 50000
     }],
     popupTemplate: {
-        title: "WC - {mesto}",
+        title: "{kategorie} - {mesto}",
         content: [
             {
                 type: "fields",

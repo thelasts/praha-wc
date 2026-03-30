@@ -3,6 +3,7 @@ import LayerList from "@arcgis/core/widgets/LayerList.js";
 import Expand from "@arcgis/core/widgets/Expand.js";
 import Legend from "@arcgis/core/widgets/Legend.js";
 import Home from "@arcgis/core/widgets/Home.js";
+import FeatureTable from "@arcgis/core/widgets/FeatureTable.js";
 
 export function createLayerList(view, basemapLayer, loadBasemapStyle) {
     const layerList = new LayerList({
@@ -113,5 +114,18 @@ export function createLegend(view) {
 export function createHomeWidget(view) {
     return new Home({
         view: view
+    });
+}
+
+export function createFeatureTable(view, wcLayer) {
+    const featureTable = new FeatureTable({
+        view: view,
+        layer: wcLayer,
+        container: "tableDiv"
+    });
+    return new Expand({
+        content: featureTable,
+        view: view,
+        expanded: true
     });
 }

@@ -12,10 +12,28 @@
     <link rel="stylesheet" href="https://js.arcgis.com/calcite-components/3.0.3/calcite.css" />
     <link rel="stylesheet" href="styles/main.css" />
 </head>
-<!-- Add the calcite-mode-light class to the body -->
 <body class="calcite-mode-light">
-<h1>♿ Bezbariérové WC - Praha</h1>
-<div id="viewDiv"></div>
-<script type="module" src="/src/main.js"></script>
+<header class="app-header">
+    <div class="h-left">
+        <h1>♿ Mapa veřejné dostupných bezbariérových WC</h1>
+        <p>Testový úkol pro pozici FrontEndDeveloper v IPR Praha. Zpracoval Aleksandr Khomutov (khomambe@proton.me). Výrobeno III/2026 v Praze, ČR.</p>
+    </div>
+    <div class="h-right">
+        <a href="https://example.com" target="_blank" class="h-link">
+            <img src="icon1.png" alt="Odkaz 1">
+        </a>
+        <a href="https://example.com" target="_blank" class="h-link">
+            <img src="icon2.png" alt="Odkaz 2">
+        </a>
+    </div>
+</header>
+<div class="app-layout">
+    <div id="viewDiv"></div>
+    <div id="resizer">
+        <div class="resizer-handle"></div>
+    </div>
+    <div id="tableDiv"></div>
+    <script type="module" src="/src/main.js"></script>
+</div>
 </body>
 </html>

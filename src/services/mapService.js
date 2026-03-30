@@ -6,10 +6,17 @@ import Basemap from "@arcgis/core/Basemap.js";
 import { MAP_CONFIG } from "../config/mapConfig.js";
 
 export function createMap(layers) {
+    const basemapLayer = layers.find((layer) => layer.title === "Vrstva Základní mapa");
+    const operationalLayers = layers.filter((layer) => layer.title !== "Vrstva Základní mapa");
+
     return new Map({
-        basemap: new Basemap({baseLayers: layers.find((layer) => layer.type === "basemap")}),
-        layers: layers,
-        spatialReference: MAP_CONFIG.spatialReference
+        basemap: new Basemap({
+            baseLayers: [basemapLayer]
+        }),
+        layers: operationalLayers,
+        spatialReference: MAP_CONFIG.spatialReference,
+        // TODO credit attribution copyright???
+        credit: "IPR Praha"
     });
 }
 
@@ -18,6 +25,6 @@ export function createMapView(map, containerId) {
         container: containerId,
         map: map,
         extent: new Extent(MAP_CONFIG.extent),
-        zoom: MAP_CONFIG.zoom
+        zoom: MAP_CONFIG.zoom,
     });
 }
