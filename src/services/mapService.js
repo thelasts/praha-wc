@@ -6,14 +6,15 @@ import Basemap from "@arcgis/core/Basemap.js";
 import { MAP_CONFIG } from "../config/mapConfig.js";
 
 export function createMap(layers) {
-    const basemapLayer = layers.find((layer) => layer.title === "Vrstva Základní mapa");
-    const operationalLayers = layers.filter((layer) => layer.title !== "Vrstva Základní mapa");
+    const baseLayerTitle = "Vrstva Základní mapa";
+    const basemapLayer = layers.find((layer) => layer.title === baseLayerTitle);
+    // const operationalLayers = layers.filter((layer) => layer.title !== baseLayerTitle);
 
     return new Map({
         basemap: new Basemap({
             baseLayers: [basemapLayer]
         }),
-        layers: operationalLayers,
+        layers: layers,
         spatialReference: MAP_CONFIG.spatialReference,
         // TODO credit attribution copyright???
         credit: "IPR Praha"

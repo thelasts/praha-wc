@@ -2,8 +2,10 @@
 import LayerList from "@arcgis/core/widgets/LayerList.js";
 import Expand from "@arcgis/core/widgets/Expand.js";
 import Legend from "@arcgis/core/widgets/Legend.js";
+import Print from "@arcgis/core/widgets/Print.js";
 import Home from "@arcgis/core/widgets/Home.js";
 import FeatureTable from "@arcgis/core/widgets/FeatureTable.js";
+import Search from "@arcgis/core/widgets/Search.js";
 
 export function createLayerList(view, basemapLayer, loadBasemapStyle) {
     const layerList = new LayerList({
@@ -18,7 +20,7 @@ export function createLayerList(view, basemapLayer, loadBasemapStyle) {
                     title: "Change basemap style",
                     content: (() => {
                         const container = document.createElement("div");
-                        container.style.padding = "10px";
+                        container.style.padding = "6px";
 
                         const label = document.createElement("calcite-label");
                         label.setAttribute("scale", "s");
@@ -65,7 +67,8 @@ export function createLayerList(view, basemapLayer, loadBasemapStyle) {
                 title: "Change layer opacity",
                 content: (() => {
                     const container = document.createElement("div");
-                    container.style.padding = "10px";
+                    container.style.padding = "6px";
+                    container.title = "Change layer opacity";
 
                     const label = document.createElement("calcite-label");
                     label.setAttribute("scale", "s");
@@ -107,7 +110,18 @@ export function createLegend(view) {
     return new Expand({
         content: legend,
         view: view,
-        expanded: false
+        expanded: false,
+        placement: "right-end"
+    });
+}
+
+export function createPrint(view) {
+    const print = new Print({
+        view: view,
+    });
+    return new Expand({
+        view: view,
+        container: "viewDiv"
     });
 }
 
@@ -127,5 +141,19 @@ export function createFeatureTable(view, wcLayer) {
         content: featureTable,
         view: view,
         expanded: true
+    });
+}
+
+export function createSearchWidget(view) {
+    const search = new Search({
+        view: view,
+        container: document.createElement("div"),
+        autoNavigate: true,
+    });
+    return new Expand({
+        content: search,
+        view:view,
+        expanded: false,
+        icon: "search",
     });
 }

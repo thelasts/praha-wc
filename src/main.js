@@ -19,7 +19,14 @@ import {
 import { createMap, createMapView } from "./services/mapService.js";
 import { loadGraphics } from "./services/dataService.js";
 
-import { createLayerList, createLegend, createHomeWidget, createFeatureTable } from "./components/widgets.js";
+import {
+    createLayerList,
+    createLegend,
+    createHomeWidget,
+    createFeatureTable,
+    // createPrint,
+    createSearchWidget,
+} from "./components/widgets.js";
 import { initResizer } from "./components/resizer.js";
 import { WC_PATH, WC_PATH_IN } from "./config/dataPaths.js";
 
@@ -51,12 +58,24 @@ async function initApp() {
     const legendExpand = createLegend(view);
     const homeWidget = createHomeWidget(view);
     const tableList = createFeatureTable(view, wcLayer);
+    // const printExpand = createPrint(view);
+    const searchWidget = createSearchWidget(view);
 
+    // bottom left
     view.ui.add(layerListExpand, "bottom-left");
+    // top left
     view.ui.add(homeWidget, "top-left");
     view.ui.add(legendExpand, "top-left");
+    // view.ui.add(printExpand, "top-left");
+
+    // bottom right
+
+    // top right
+    view.ui.add(searchWidget, {
+        position: "top-right",
+        index: 2
+    });
     // view.ui.add(tableList, "bottom-trailing");
-    view.ui.move("attribution", "bottom-right");
 }
 
 initApp().catch(console.error);
