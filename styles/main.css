@@ -70,7 +70,9 @@ body, html {
     flex: 1 1 auto;
     min-height: 150px;
 }
-/* feature table container*/
+
+
+/* feature table container */
 #tableDiv {
     flex: 0 0 auto;
     height: 300px;
@@ -83,6 +85,8 @@ body, html {
     background-color: #f3f3f3;
     cursor: ns-resize;
     display: flex;
+    /*desktop only*/
+    touch-action: none;
     justify-content: center;
     align-items: center;
     border-top: 1px solid #ccc;
@@ -101,4 +105,25 @@ body, html {
 #resizer:hover .resizer-handle,
 #resizer:active .resizer-handle {
     background-color: #0079c1;
+}
+
+/* mobile fix */
+@media (hover: none) and (pointer: coarse) {
+    .h-left p {
+        display: none;
+    }
+
+    #tableDiv {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+    #tableDiv.is-collapsed {
+        overflow: hidden;
+        height: 0;
+    }
+
+    #resizer {
+        cursor: pointer;
+        touch-action: manipulation;
+    }
 }

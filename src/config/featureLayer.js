@@ -81,6 +81,7 @@ export const FEATURE_LAYER_CONFIG = {
             {
                 type: "fields",
                 fieldInfos: [
+                    { fieldName: "OBJECTID", label: "Object ID" },
                     { fieldName: "kategorie", label: "Category" },
                     { fieldName: "ulice", label: "Street" },
                     { fieldName: "mesto", label: "City" },

@@ -26,6 +26,7 @@ import {
     createFeatureTable,
     // createPrint,
     createSearchWidget,
+    createFullscreen,
 } from "./components/widgets.js";
 import { initResizer } from "./components/resizer.js";
 import { WC_PATH, WC_PATH_IN } from "./config/dataPaths.js";
@@ -60,6 +61,7 @@ async function initApp() {
     const tableList = createFeatureTable(view, wcLayer);
     // const printExpand = createPrint(view);
     const searchWidget = createSearchWidget(view);
+    const fullscreenWidget = createFullscreen(view);
 
     // bottom left
     view.ui.add(layerListExpand, "bottom-left");
@@ -69,6 +71,7 @@ async function initApp() {
     // view.ui.add(printExpand, "top-left");
 
     // bottom right
+    view.ui.add(fullscreenWidget, "bottom-right");
 
     // top right
     view.ui.add(searchWidget, {

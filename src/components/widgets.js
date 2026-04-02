@@ -6,6 +6,8 @@ import Print from "@arcgis/core/widgets/Print.js";
 import Home from "@arcgis/core/widgets/Home.js";
 import FeatureTable from "@arcgis/core/widgets/FeatureTable.js";
 import Search from "@arcgis/core/widgets/Search.js";
+import Fullscreen from "@arcgis/core/widgets/Fullscreen.js";
+
 
 export function createLayerList(view, basemapLayer, loadBasemapStyle) {
     const layerList = new LayerList({
@@ -155,5 +157,11 @@ export function createSearchWidget(view) {
         view:view,
         expanded: false,
         icon: "search",
+    });
+}
+
+export function createFullscreen(view) {
+    return new Fullscreen({
+        view: view
     });
 }
