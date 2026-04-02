@@ -1,6 +1,7 @@
 praha-wc
 -
 
+TL;DR 0. npm+Node20 and `./data` setup required. 1. `npm install` 2. `npm run dev`
 ## Intro
 This project is a web-based client-side map application focused on displaying accessible public toilets in Prague. Part of the test task for IPR Praha.
 ## Project Description
